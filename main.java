@@ -1,3 +1,4 @@
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class main {
@@ -5,45 +6,37 @@ public class main {
     public static void main(String[] args) {
         
         Scanner input = new Scanner(System.in);
+        boolean keepRunning = true;
         System.out.println("-- Currency Converter --");
-        System.out.print("Enter the amount in Euros (€): ");
+        while (keepRunning) {
+            try{
+                System.out.print("\nEnter the amount in Euros (€) or 0 for output:");
+                double euro = input.nextDouble();
 
-        System.out.println("\nWhat currency do you want the conversion to be made to? ");
-        System.out.println("1. Dollars ($)");
-        System.out.println("2. Pounds(£)");
-        System.out.println("Choice (1 or 2)");
+                if (euro == 0){
+                    keepRunning = false;
+                    System.out.println("Thank you for using our services!!");
+                    break;
+                }
+                System.out.println("\nWhat currency do you want the conversion to be made to? 1. for dollars or 2. for pounds! ");
+                int choice = input.nextInt();
 
-        double euro = input.nextDouble();
-        double dollars = convertToUSD(euro);
-        double pounds = convertToGBP(euro);
-
-        int choice = input.nextInt();
-        switch (choice) {
-            case 1:
-                double usd = euro * 1.09;
-                System.out.printf("%2f€ = %2f$\n", euro, usd);
-                break;
+                switch (choice) {
+                    case 1:
+                        System.out.printf("%.2f€ = %.2f$\n", euro, (euro * 1.09));
+                        break;
             
-            case 2:
-                double gbp = euro * 0.85;
-                System.out.printf("%2f€ = %2f£\n", euro, gbp);
-                break;
-            default:
-                System.out.println("Wrong Choise! Please choose 1 or 2.");
+                    case 2:
+                        System.out.printf("%.2f€ = %.2f£\n", euro, (euro * 0.85));
+                        break;
+                    default:
+                        System.out.println("Wrong Choise! Please choose 1 or 2.");
+                }
+            } catch (InputMismatchException e){
+                System.out.println("Error: Please enter numbers only!");
+                input.nextLine();
+            }
         }
-
-        System.out.println(euro + "€ is equal to: ");
-        System.out.printf("%.2f ($\n)", dollars);
-        System.out.printf("%.2f Λίρες (£)\n", pounds);
-        
         input.close();
-    }
-
-    public static double convertToUSD(double amount){
-        return amount * 1.09;
-    }
-
-    public static double convertToGBP(double amount){
-        return amount * 0.85;
     }
 }
